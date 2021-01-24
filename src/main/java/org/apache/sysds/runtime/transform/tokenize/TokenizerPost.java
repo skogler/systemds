@@ -22,27 +22,9 @@ package org.apache.sysds.runtime.transform.tokenize;
 import org.apache.sysds.common.Types;
 import org.apache.sysds.runtime.matrix.data.FrameBlock;
 
-public class TokenizerWhitespaceBOW extends Tokenizer {
+import java.io.Serializable;
 
-    private static final long serialVersionUID = 9130577081982055688L;
-
-    protected TokenizerWhitespaceBOW(Types.ValueType[] schema, int[] colList) {
-        super(schema, colList);
-    }
-
-    @Override
-    public FrameBlock tokenize(FrameBlock in, FrameBlock out) {
-        String[][] data = {
-                {
-                        "id1", "token1", "10"
-                },
-                {
-                        "id1", "token2", "20"
-                },
-                {
-                        "id2", "token2", "30"
-                }
-        };
-        return new FrameBlock(getSchema(), data);
-    }
+public interface TokenizerPost extends Serializable {
+    FrameBlock tokenizePost(Tokenizer.DocumentsToTokenList tl, FrameBlock out);
+    Types.ValueType[] getOutSchema();
 }

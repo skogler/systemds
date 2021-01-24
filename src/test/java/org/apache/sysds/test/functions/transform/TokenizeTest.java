@@ -38,11 +38,11 @@ public class TokenizeTest extends AutomatedTestBase
     private static final String TEST_DIR = "functions/transform/";
     private static final String TEST_CLASS_DIR = TEST_DIR + TokenizeTest.class.getSimpleName() + "/";
 
-    private static final String SPEC = "TokenizeSpec.json";
+    private static final String SPEC1 = "TokenizeSpec1.json";
+    private static final String SPEC2 = "TokenizeSpec2.json";
 
     //dataset and transform tasks without missing values
-//    private final static String DATASET 	= "csv_mix/quotes1.csv";
-    private final static String DATASET 	= "20news/20news_subset.csv";  // TODO: use untokenized as input
+    private final static String DATASET 	= "20news/20news_subset_untokenized.csv";
 
     @Override
     public void setUp()  {
@@ -52,67 +52,68 @@ public class TokenizeTest extends AutomatedTestBase
     }
 
     @Test
-    public void testFrameReadMetaSingleNodeCSV() {
-        runTokenizeTest(ExecMode.SINGLE_NODE, "csv", false, false);
+    public void testTokenizeSingleNodeSpec1() {
+        runTokenizeTest(ExecMode.SINGLE_NODE, SPEC1,false);
     }
 
     @Test
-    public void testFrameReadMetaSparkCSV() {
-        runTokenizeTest(ExecMode.SPARK, "csv", false, false);
+    public void testTokenizeSparkSpec1() {
+        runTokenizeTest(ExecMode.SPARK, SPEC1, false);
     }
 
     @Test
-    public void testFrameReadMetaHybridCSV() {
-        runTokenizeTest(ExecMode.HYBRID, "csv", false, false);
+    public void testTokenizeHybridSpec1() {
+        runTokenizeTest(ExecMode.HYBRID, SPEC1, false);
     }
 
     @Test
-    public void testFrameParReadMetaSingleNodeCSV() {
-        runTokenizeTest(ExecMode.SINGLE_NODE, "csv", false, true);
+    public void testTokenizeParReadSingleNodeSpec1() {
+        runTokenizeTest(ExecMode.SINGLE_NODE, SPEC1, true);
     }
 
     @Test
-    public void testFrameParReadMetaSparkCSV() {
-        runTokenizeTest(ExecMode.SPARK, "csv", false, true);
+    public void testTokenizeParReadSparkSpec1() {
+        runTokenizeTest(ExecMode.SPARK, SPEC1, true);
     }
 
     @Test
-    public void testFrameParReadMetaHybridCSV() {
-        runTokenizeTest(ExecMode.HYBRID, "csv", false, true);
+    public void testTokenizeParReadHybridSpec1() {
+        runTokenizeTest(ExecMode.HYBRID, SPEC1, true);
     }
 
     @Test
-    public void testFrameReadSubMetaSingleNodeCSV() {
-        runTokenizeTest(ExecMode.SINGLE_NODE, "csv", true, false);
+    public void testTokenizeSingleNodeSpec2() {
+        runTokenizeTest(ExecMode.SINGLE_NODE, SPEC2,false);
     }
 
     @Test
-    public void testFrameReadSubMetaSparkCSV() {
-        runTokenizeTest(ExecMode.SPARK, "csv", true, false);
+    public void testTokenizeSparkSpec2() {
+        runTokenizeTest(ExecMode.SPARK, SPEC2, false);
     }
 
     @Test
-    public void testFrameReadSubMetaHybridCSV() {
-        runTokenizeTest(ExecMode.HYBRID, "csv", true, false);
+    public void testTokenizeHybridSpec2() {
+        runTokenizeTest(ExecMode.HYBRID, SPEC2, false);
     }
 
     @Test
-    public void testFrameParReadSubMetaSingleNodeCSV() {
-        runTokenizeTest(ExecMode.SINGLE_NODE, "csv", true, true);
+    public void testTokenizeParReadSingleNodeSpec2() {
+        runTokenizeTest(ExecMode.SINGLE_NODE, SPEC2, true);
     }
 
     @Test
-    public void testFrameParReadSubMetaSparkCSV() {
-        runTokenizeTest(ExecMode.SPARK, "csv", true, true);
+    public void testTokenizeParReadSparkSpec2() {
+        runTokenizeTest(ExecMode.SPARK, SPEC2, true);
     }
 
     @Test
-    public void testFrameParReadSubMetaHybridCSV() {
-        runTokenizeTest(ExecMode.HYBRID, "csv", true, true);
+    public void testTokenizeParReadHybridSpec2() {
+        runTokenizeTest(ExecMode.HYBRID, SPEC2, true);
     }
 
-    private void runTokenizeTest(ExecMode rt, String ofmt, boolean subset, boolean parRead )
+    private void runTokenizeTest(ExecMode rt, String spec, boolean parRead )
     {
+        String ofmt = "csv";
         //set runtime platform
         ExecMode rtold = rtplatform;
         rtplatform = rt;
@@ -129,10 +130,9 @@ public class TokenizeTest extends AutomatedTestBase
             getAndLoadTestConfiguration(TEST_NAME1);
 
             String HOME = SCRIPT_DIR + TEST_DIR;
-            int nrows = subset ? 4 : 13;
             fullDMLScriptName = HOME + TEST_NAME1 + ".dml";
             programArgs = new String[]{"-stats","-args",
-                    HOME + "input/" + DATASET, String.valueOf(nrows), output("R") };
+                    HOME + "input/" + DATASET, HOME + spec, output("R") };
 
             runTest(true, false, null, -1);
 
